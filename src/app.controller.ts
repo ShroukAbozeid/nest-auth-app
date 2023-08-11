@@ -48,6 +48,12 @@ export class AppController {
     })
     res.redirect('/home')
   }
+
+  @Get('auth/logout')
+  logout(@Response({ passthrough: true}) res){
+    res.cookie('access_token', undefined)
+    res.redirect('/')
+  }
   
   @UseGuards(JwtAuthGuard)
   @Get('profile')
