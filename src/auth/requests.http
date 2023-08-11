@@ -16,9 +16,23 @@ content-type: application/json
   "password": "changemeeee"
 }
 
+### signup
+POST http://localhost:3000/auth/signup
+content-type: application/json
+
+{
+  "username": "john",
+  "password": "changemeeee"
+}
+
 ### root
 GET  http://localhost:3000
 
 ### profile
 GET  http://localhost:3000/profile
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTY5MTc1MTA0MSwiZXhwIjoxNjkxNzUxMTAxfQ.8Dq-4qCAkuXQTzppHqELDeHBQS7vfQZMcHeO3K5_MMQ
+
+
+### home
+GET  http://localhost:3000/home
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTY5MTc1NDg3NywiZXhwIjoxNjkxNzU0OTM3fQ.2LyfQFNp1pEr6tCx-gGBlHx_hsT90NCiDMaf9ewDsBM
