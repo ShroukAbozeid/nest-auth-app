@@ -2,6 +2,7 @@ import { Controller, Get, Post, Render, UseGuards, Request, Body, Response,} fro
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { CreateUserDto } from './users/dtos/create-user.dto';
 @Controller()
 export class AppController {
   constructor(private readonly authService: AuthService) {}
@@ -26,8 +27,9 @@ export class AppController {
 
   @Post('auth/signup')
   @Render('auth/signup')
-  signup(@Body() body){
-    console.log(body)
+  async signup(@Body() body: CreateUserDto, @Response({ passthrough: true}) res){
+    const user = await this.authService.createUser(body);
+    this.loginAndRedirect(user, res)
   }
 
   @Get('auth/login')
@@ -37,16 +39,19 @@ export class AppController {
 
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
-  async login(@Request() req, 
-              @Response({ passthrough: true}) res) {
-    const { accessToken } = await this.authService.login(req.user);
+  login(@Request() req, @Response({ passthrough: true}) res) {
+    this.loginAndRedirect(req.user, res)
+  }
+
+  async loginAndRedirect(user: {id: number, email: string}, @Response({ passthrough: true}) res) {
+    const { accessToken } = await this.authService.login(user);
     res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: 'lax',
       expires: new Date(Date.now() + 1 * 24 * 60 * 1000)
     })
-    res.redirect('/home')
+   return res.redirect('/home')
   }
 
   @Get('auth/logout')
