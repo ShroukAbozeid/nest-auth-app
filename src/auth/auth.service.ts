@@ -1,11 +1,11 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, forwardRef, Inject } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 @Injectable()
 export class AuthService {
-  constructor(private usersService: UsersService,
+  constructor(@Inject(forwardRef(() => UsersService )) private usersService: UsersService,
               private jwtService: JwtService){}
 
   async validateUser(email: string, pass: string): Promise<any> {

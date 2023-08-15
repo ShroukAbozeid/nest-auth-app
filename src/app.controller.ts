@@ -16,7 +16,6 @@ export class AppController {
   @Get('home')
   async home(@Request() req, @Response() res) {
     const user = await this.usersService.findOne(req.user.userId)
-    console.log(user)
     res.render('home', {user})
   }
 }

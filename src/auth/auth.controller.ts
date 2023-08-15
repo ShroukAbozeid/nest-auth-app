@@ -8,7 +8,7 @@ export class AuthController {
 
   @Get('signup')
   @Render('auth/signup')
-  get_signup_form(){
+  getSignupForm(){
   }
 
   @Post('signup')
@@ -20,7 +20,7 @@ export class AuthController {
 
   @Get('login')
   @Render('auth/login')
-  get_login_form(){
+  getLoginForm(){
   }
 
   @UseGuards(LocalAuthGuard)
