@@ -7,9 +7,12 @@ export class AppController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @Render('index')
-  root(@Request() req) {
-    return { message: 'Hello Shrouq' };
+  root(@Request() req, @Response() res) {
+    if(req.cookies.access_token){
+      res.redirect('home')
+    } else {
+      res.render('index')
+    }
   }
 
   @UseGuards(JwtAuthGuard)
