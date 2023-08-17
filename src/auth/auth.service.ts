@@ -1,24 +1,26 @@
 import { Injectable, BadRequestException, forwardRef, Inject } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
-import { CreateUserDto } from 'src/users/dtos/create-user.dto';
+import { CreateUserDto } from '../users/dtos/create-user.dto';
+import { MailerService } from '../mailer/mailer.service';
 @Injectable()
 export class AuthService {
   constructor(@Inject(forwardRef(() => UsersService )) private usersService: UsersService,
-              private jwtService: JwtService){}
+              private jwtService: JwtService,
+              private mailerService: MailerService){}
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findByEmail(email);
     if (user && await this.isMatch(pass, user.password)){
-      const { password, ...result } = user;
-      return result;
+      user.password = undefined
+      return user;
     }
     return null;
   }
 
   async login(user: {id: number, email: string}){
-    const payload = { username: user.email, sub: user.id }
+    const payload = { email: user.email, id: user.id }
     return {
       accessToken: this.jwtService.sign(payload)
     }
@@ -34,13 +36,15 @@ export class AuthService {
   }
 
   async createUser(userDto: CreateUserDto){
-    const user = await this.usersService.findByEmail(userDto.email);
+    let user = await this.usersService.findByEmail(userDto.email);
     if (user) {
       throw new BadRequestException('Email taken!')
     }
     const hashedPassword = await this.hashPassword(userDto.password)
     userDto.password = hashedPassword;
-    const { password, ...result } = await this.usersService.createUser(userDto);
-    return result;
+    user = await this.usersService.createUser(userDto);
+    await this.mailerService.sendConfirmationMail(userDto.email, userDto.name)
+    user.password = undefined
+    return user;
   }
 }

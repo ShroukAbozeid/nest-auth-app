@@ -26,24 +26,14 @@ export class UsersService {
     return this.usersRepo.save(user);
   }
 
-  async updateUser(userId: number, userDto: UpdateUserDto) {
-    // find user
-    const user = await this.findOne(userId)
-    if (!user) {
-      throw new NotFoundException('user not found')
-    }
-    // check email uniqueness
-    if(userDto.email) {
-      const anotherUser = await this.findByEmail(userDto.email)
-      if (anotherUser.id != userId) {
-        throw new BadRequestException('Email taken!')
-      }
-    }
-    // hash password
+  async updateUser(user: User, userDto: UpdateUserDto) {
+    // hash password if changed
     if(userDto.password) {
       userDto.password = await this.authService.hashPassword(userDto.password)
+    } else { // keep password the same
+      userDto.password = user.password;
     }
     // update user
-    return await this.usersRepo.update({id: userId}, userDto)
+    return await this.usersRepo.update({id: user.id}, userDto)
   }
 }

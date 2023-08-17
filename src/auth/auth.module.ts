@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
+import { MailerModule } from 'src/mailer/mailer.module';
 @Module({
   imports: [
     forwardRef(() => UsersModule),
@@ -17,7 +18,8 @@ import { AuthController } from './auth.controller';
         signOptions: {expiresIn: '1d'}
       }),
       inject: [ConfigService]
-    })
+    }),
+    MailerModule
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],

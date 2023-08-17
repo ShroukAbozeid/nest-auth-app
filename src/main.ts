@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser'
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+import { UnauthorizedFilter } from './filters/unauthorized-filter';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   // views setup
@@ -20,6 +21,9 @@ async function bootstrap() {
 
   // validations
   app.useGlobalPipes(new ValidationPipe());
+
+  // filters
+  app.useGlobalFilters(new UnauthorizedFilter());
 
   await app.listen(3000);
 }

@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
-
+import { MailerModule } from './mailer/mailer.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,7 +30,8 @@ import { User } from './users/user.entity';
       inject: [ConfigService]
     }),
     AuthModule,
-    UsersModule
+    UsersModule,
+    MailerModule
   ],
   controllers: [AppController],
   providers: [AppService],
