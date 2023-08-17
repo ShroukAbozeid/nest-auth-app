@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 import { MailerController } from './mailer.controller';
 import { MailerModule as NestMailerModule } from  '@nestjs-modules/mailer';
@@ -6,17 +6,10 @@ import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { ConfigService } from '@nestjs/config';
 import { UsersModule } from 'src/users/users.module';
-import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      useFactory: async(configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_EMAIL_SECRET'),
-        signOptions: {expiresIn: '1d'}
-      }),
-      inject: [ConfigService]
-    }),
     NestMailerModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         transport: {
@@ -41,7 +34,8 @@ import { JwtModule } from '@nestjs/jwt';
       }),
       inject: [ConfigService]
     }),
-    UsersModule
+    UsersModule,
+    forwardRef(() => AuthModule)
   ],
   providers: [MailerService],
   exports: [MailerService],

@@ -11,6 +11,7 @@ import { MailerModule } from 'src/mailer/mailer.module';
 @Module({
   imports: [
     forwardRef(() => UsersModule),
+    forwardRef(() => MailerModule),
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async(configService: ConfigService) => ({
@@ -19,7 +20,6 @@ import { MailerModule } from 'src/mailer/mailer.module';
       }),
       inject: [ConfigService]
     }),
-    MailerModule
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],

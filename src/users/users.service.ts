@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthService } from '../auth/auth.service';
+import { ResetPasswordDto } from 'src/auth/dtos/reset-password.dto';
 
 @Injectable()
 export class UsersService {
