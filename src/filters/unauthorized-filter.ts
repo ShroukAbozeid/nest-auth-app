@@ -9,10 +9,12 @@ export class UnauthorizedFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus()
 
-    if ( exception.message == 'Please confirm your email first') {
-      return response.render('auth/confirm-mail', {user: request.user})
-    } else {
-     return response.redirect('/')
+    if (exception.message == 'Please confirm your email first') { // authorized but email not confirmed
+      response.render('auth/confirm-mail', {user: request.user})
+    } else if (exception.message == 'Invalid credentials') { // wrong login
+      response.render('auth/login', { message: exception.message})
+    } else { // invalid token
+      response.redirect('/')
     }
   }
 }
