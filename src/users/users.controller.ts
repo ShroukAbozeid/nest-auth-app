@@ -1,7 +1,8 @@
-import { Controller, Get, UseGuards, Request, Response, Post} from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Response, Post, Render} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { EmailConfirmGuard } from 'src/auth/guards/email-confirm.guard';
+import { AdminGuard } from 'src/auth/guards/admin.guard';
 
 @UseGuards(EmailConfirmGuard)
 @UseGuards(JwtAuthGuard)
@@ -23,5 +24,13 @@ export class UsersController {
   async update(@Request() req, @Response() res) {
     const user = this.usersService.updateUser(req.user, req.body)
     res.redirect('/users/profile')
+  }
+
+  @Get()
+  @Render('users/list')
+  @UseGuards(AdminGuard)
+  async allUsers(){
+    const users = await this.usersService.findAll()
+    return { users }
   }
 }

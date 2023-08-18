@@ -39,4 +39,8 @@ export class UsersService {
     // update user
     return await this.usersRepo.update({id: user.id}, userDto)
   }
+
+  async findAll() {
+    return await this.usersRepo.find()
+  }
 }
