@@ -7,6 +7,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthService } from '../auth/auth.service';
 import { ResetPasswordDto } from 'src/auth/dtos/reset-password.dto';
+import { GoogleUserDto } from 'src/auth/dtos/google-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -22,10 +23,11 @@ export class UsersService {
     return await this.usersRepo.findOneBy({ email: email})
   }
 
-  createUser(userDto: CreateUserDto) {
+  createUser(userDto: CreateUserDto | GoogleUserDto) {
     const user = this.usersRepo.create(userDto)
     return this.usersRepo.save(user);
   }
+  
 
   async updateUser(user: User, userDto: UpdateUserDto) {
     // hash password if changed

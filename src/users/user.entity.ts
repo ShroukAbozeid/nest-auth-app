@@ -1,10 +1,17 @@
+import { IsIn } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column,
-         CreateDateColumn, UpdateDateColumn, Unique} from 'typeorm';
+         CreateDateColumn, UpdateDateColumn} from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ default: 'email'})
+  provider: string;
+
+  @Column({nullable: true})
+  providerId: string;
 
   @Column({ unique: true })
   email:string;
@@ -15,7 +22,7 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({nullable: true})
   password: string;
 
   @Column({default: false})

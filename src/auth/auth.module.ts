@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { MailerModule } from 'src/mailer/mailer.module';
+import { GoogleStrategy } from './strategies/google.stratgy';
 @Module({
   imports: [
     forwardRef(() => UsersModule),
@@ -21,7 +22,7 @@ import { MailerModule } from 'src/mailer/mailer.module';
       inject: [ConfigService]
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
   exports: [AuthService],
   controllers: [AuthController]
 })

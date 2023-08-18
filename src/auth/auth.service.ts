@@ -5,6 +5,8 @@ import * as bcrypt from 'bcrypt'
 import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { MailerService } from '../mailer/mailer.service';
 import { ConfigService } from '@nestjs/config';
+import { GoogleUserDto } from './dtos/google-user.dto';
+import { AccessTokenPayloadDto } from './dtos/access-token-payload.dto';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +25,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: {id: number, email: string}){
+  async login(user: AccessTokenPayloadDto){
     const payload = { email: user.email, id: user.id }
     return {
       accessToken: this.jwtService.sign(payload)
@@ -84,5 +86,17 @@ export class AuthService {
     }
     const user = await this.usersService.findByEmail(email)
     await this.mailerService.sendForgetPasswordMail(email, user.name)
+  }
+
+  async googleLogin(userDto: GoogleUserDto) {
+    let user = await this.usersService.findByEmail(userDto.email)
+
+    if (!user) {
+      user = await this.usersService.createUser(userDto)
+    } else if (user.provider != 'google') {
+      throw new BadRequestException(`this user is signed in by ${user.provider}`)
+    }
+
+    return user;
   }
 }

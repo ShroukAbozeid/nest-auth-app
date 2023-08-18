@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Request, Response, Post} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { EmailConfirmGuard } from 'src/auth/guards/email-confirm-guard';
+import { EmailConfirmGuard } from 'src/auth/guards/email-confirm.guard';
 
 @UseGuards(EmailConfirmGuard)
 @UseGuards(JwtAuthGuard)
