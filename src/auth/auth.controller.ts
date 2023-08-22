@@ -1,12 +1,12 @@
-import { Controller, Get, Post, Render, UseGuards, Request, Body, Response, Query,} from '@nestjs/common';
+import { Controller, Get, Post, Render, UseGuards, Request, Body, Response, Query, Session } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 import { AccessTokenPayloadDto } from './dtos/access-token-payload.dto';
+import { LoginGuard } from './guards/login-guard';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService,
@@ -19,10 +19,12 @@ export class AuthController {
 
   // signup email-password
   @Post('signup')
-  async signup(@Body() body: CreateUserDto, @Response({ passthrough: true}) res){
+  @Render('auth/confirm-mail')
+  async signup(@Body() body: CreateUserDto, @Request() req){
     const user = await this.authService.createUser(body);
-    await this.setCookie(user, res)
-    res.redirect('/home')
+    await req.login(user, () => {
+    })
+    return { user }
   }
 
   // login form
@@ -31,22 +33,19 @@ export class AuthController {
   getLoginForm(){}
 
   // login email-password
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LoginGuard)
   @Post('login')
-  async login(@Request() req, @Response({passthrough: true}) res) {
-    await this.setCookie(req.user, res);
+  async login(@Response({passthrough: true}) res) {
     res.redirect('/home')
   }
 
   // logout
   @Get('logout')
-  logout(@Response({ passthrough: true}) res){
-    res.clearCookie('access_token', '', {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-      expires: new Date()})
-    res.redirect('/')
+  logout(@Request() req, @Response() res){
+    req.logout(() => {  
+      req.session.destroy();
+      res.redirect('/');
+    });
   }
 
   // forget password form
@@ -91,14 +90,13 @@ export class AuthController {
   @UseGuards(GoogleOAuthGuard)
  async googleAuthRedirect(@Request() req, @Response({ passthrough: true}) res){
     const user = await this.authService.googleLogin(req.user);
-    await this.setCookie(user, res)
     res.redirect('/home')
   }
 
   // helper methods
   async setCookie(user: AccessTokenPayloadDto, res){
     const { accessToken } = await this.authService.login(user);
-    return res.cookie('access_token', accessToken, {
+return res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: 'lax',

@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Request, Response} from '@nestjs/common';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { UsersService } from './users/users.service';
 import { EmailConfirmGuard } from './auth/guards/email-confirm.guard';
+import { AuthenticatedGuard } from 'src/auth/guards/auth-guard';
 
 @Controller()
 export class AppController {
@@ -9,7 +9,7 @@ export class AppController {
 
   @Get()
   root(@Request() req, @Response() res) {
-    if(req.cookies.access_token){
+    if(req.isAuthenticated()){
       res.redirect('home')
     } else {
       res.render('index')
@@ -17,10 +17,9 @@ export class AppController {
   }
 
   @UseGuards(EmailConfirmGuard)
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthenticatedGuard)
   @Get('home')
   async home(@Request() req, @Response() res) {
-    const user = await this.usersService.findOne(req.user.id)
-    res.render('home', {user})
+    res.render('home', { user: req.user })
   }
 }

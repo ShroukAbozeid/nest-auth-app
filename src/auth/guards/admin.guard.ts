@@ -3,9 +3,9 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 @Injectable()
 export class AdminGuard implements CanActivate{
  canActivate(context: ExecutionContext) {
-  const request = context.switchToHttp().getRequest()
-  if(!request.user || !request.user.admin) {
-    throw new UnauthorizedException('Only accessiable by admins')
+  const user = context.switchToHttp().getRequest().user
+  if(!user || !user.admin) {
+    throw new UnauthorizedException('Only for admins')
   }
   return true;
  } 

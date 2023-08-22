@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Post, Body, NotFoundException, Response, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, NotFoundException, Response, UseGuards, Request } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 import { UsersService } from '../users/users.service';
 import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
@@ -13,7 +13,8 @@ export class MailerController {
 
   @Get('confirm_email')
   async confirmEmail(@Query('token') token: string,
-                     @Response({ passthrough: true}) res){
+                     @Response({ passthrough: true}) res,
+                     @Request() req){
     const email = await this.authService.findEmailFromToken(token, 'email_confirmation')
     const user = await this.userService.findByEmail(email)
     await this.userService.updateUser(user, { emailConfirmed: true } as UpdateUserDto)

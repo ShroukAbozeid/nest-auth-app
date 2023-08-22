@@ -1,11 +1,11 @@
 import { Controller, Get, UseGuards, Request, Response, Post, Render} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { EmailConfirmGuard } from 'src/auth/guards/email-confirm.guard';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
+import { AuthenticatedGuard } from 'src/auth/guards/auth-guard';
 
 @UseGuards(EmailConfirmGuard)
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthenticatedGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

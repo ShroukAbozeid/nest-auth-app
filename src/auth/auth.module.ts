@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
 import { MailerModule } from 'src/mailer/mailer.module';
 import { GoogleStrategy } from './strategies/google.stratgy';
+import { SessionSerializer } from './serializers/session.serializer';
 @Module({
   imports: [
     forwardRef(() => UsersModule),
@@ -21,8 +22,15 @@ import { GoogleStrategy } from './strategies/google.stratgy';
       }),
       inject: [ConfigService]
     }),
+    PassportModule.register({ session: true })
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    GoogleStrategy,
+    SessionSerializer,
+  ],
   exports: [AuthService],
   controllers: [AuthController]
 })
