@@ -2,8 +2,8 @@ import { Controller, Get, Post, Render, UseGuards, Request, Body, Response, Quer
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
-import { UsersService } from 'src/users/users.service';
-import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
+import { UsersService } from '../users/users.service';
+import { UpdateUserDto } from '../users/dtos/update-user.dto';
 import { ResetPasswordDto } from './dtos/reset-password.dto';
 import { GoogleOAuthGuard } from './guards/google-oauth.guard';
 import { AccessTokenPayloadDto } from './dtos/access-token-payload.dto';
