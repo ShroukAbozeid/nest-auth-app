@@ -12,7 +12,7 @@ export class AppController {
     if(req.isAuthenticated()){
       res.redirect('home')
     } else {
-      res.render('index')
+      res.render('index', { message: req.flash('error') })
     }
   }
 
@@ -20,6 +20,6 @@ export class AppController {
   @UseGuards(AuthenticatedGuard)
   @Get('home')
   async home(@Request() req, @Response() res) {
-    res.render('home', { user: req.user })
+    res.render('home', { user: req.user, message: req.flash('error') })
   }
 }

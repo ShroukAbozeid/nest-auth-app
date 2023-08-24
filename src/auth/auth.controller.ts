@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Render, UseGuards, Request, Body, Response, Query, Session } from '@nestjs/common';
+import { Controller, Get, Post, Render, UseGuards, Request, Body, Response, Query, Session, BadRequestException, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { UsersService } from 'src/users/users.service';
@@ -15,15 +15,16 @@ export class AuthController {
   // signup form 
   @Get('signup')
   @Render('auth/signup')
-  getSignupForm(){}
+  getSignupForm(){
+  }
 
   // signup email-password
   @Post('signup')
   @Render('auth/confirm-mail')
-  async signup(@Body() body: CreateUserDto, @Request() req){
-    const user = await this.authService.createUser(body);
-    await req.login(user, () => {
-    })
+  async signup(@Body() body: CreateUserDto, @Request() req, @Response({passthrough: true}) res){
+    let user;
+    user = await this.authService.createUser(body);
+    await req.login(user, () => {})
     return { user }
   }
 

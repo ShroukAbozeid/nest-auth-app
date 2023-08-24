@@ -7,7 +7,7 @@
       <div class="mdl-card__supporting-text">
         <form action="/users/update_profile" method="post">
           <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" type="text" name="name" id="name" value={{ user.name}} />
+            <input class="mdl-textfield__input" type="text" name="name" id="name" value="{{ user.name}}" />
             <label class="mdl-textfield__label" for="name">Name</label>
           </div>
           <div class="mdl-textfield mdl-js-textfield">
@@ -15,6 +15,7 @@
             <label class="mdl-textfield__label" for="password">Password</label>
           </div>
           <div class="mdl-card__actions mdl-card--border">
+            <a class="mdl-button" href='/users/profile'>back</a>
             <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Save</button>
             <span class="mdl-textfield__error">{{ message }}</span>
           </div>

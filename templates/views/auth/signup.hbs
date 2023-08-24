@@ -7,11 +7,11 @@
       <div class="mdl-card__supporting-text">
         <form action="/auth/signup" method="post">
           <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" type="text" name="name" id="name" />
+            <input class="mdl-textfield__input" type="text" name="name" id="name" value="{{user.name}}"/>
             <label class="mdl-textfield__label" for="name">Name</label>
           </div>
           <div class="mdl-textfield mdl-js-textfield">
-            <input class="mdl-textfield__input" type="text" name="email" id="email" />
+            <input class="mdl-textfield__input" type="text" name="email" id="email" value="{{user.email}}" />
             <label class="mdl-textfield__label" for="username">Email</label>
           </div>
           <div class="mdl-textfield mdl-js-textfield">

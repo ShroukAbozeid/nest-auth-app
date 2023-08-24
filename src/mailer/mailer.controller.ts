@@ -17,6 +17,9 @@ export class MailerController {
                      @Request() req){
     const email = await this.authService.findEmailFromToken(token, 'email_confirmation')
     const user = await this.userService.findByEmail(email)
+    if (!user){
+      throw new NotFoundException('user not found.')
+    }
     await this.userService.updateUser(user, { emailConfirmed: true } as UpdateUserDto)
     res.redirect('/')
   }

@@ -10,6 +10,18 @@
           <a class="mdl-button" href='/users/profile'>My Profile</a>
         </div>
       </div>
+      {{#if user.admin }}
+        <div class="mdl-card__supporting-text">
+          <div class="mdl-card__actions mdl-card--border">
+            <a class="mdl-button" href='/users'>All Users</a>
+          </div>
+        </div>
+      {{/if }}
+      <div class="mdl-card__supporting-text">
+        <div class="mdl-card__actions mdl-card--border">
+          <span class="mdl-textfield__error">{{ message }}</span>
+        </div>
+      </div>
     </div>
   </main>
 </div>

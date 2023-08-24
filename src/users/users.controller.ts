@@ -1,8 +1,9 @@
-import { Controller, Get, UseGuards, Request, Response, Post, Render} from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Response, Post, Render, Body} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { EmailConfirmGuard } from 'src/auth/guards/email-confirm.guard';
 import { AdminGuard } from 'src/auth/guards/admin.guard';
 import { AuthenticatedGuard } from 'src/auth/guards/auth-guard';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @UseGuards(EmailConfirmGuard)
 @UseGuards(AuthenticatedGuard)
@@ -21,8 +22,8 @@ export class UsersController {
   }
 
   @Post('/update_profile')
-  async update(@Request() req, @Response() res) {
-    const user = this.usersService.updateUser(req.user, req.body)
+  async update(@Body() body: UpdateUserDto, @Request() req, @Response() res) {
+    const user = this.usersService.updateUser(req.user, body)
     res.redirect('/users/profile')
   }
 
