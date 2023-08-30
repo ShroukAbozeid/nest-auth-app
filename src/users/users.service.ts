@@ -1,12 +1,10 @@
-import { Injectable, BadRequestException, NotFoundException,
-         forwardRef, Inject } from '@nestjs/common';
+import { Injectable, forwardRef, Inject } from '@nestjs/common';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthService } from '../auth/auth.service';
-import { ResetPasswordDto } from '../auth/dtos/reset-password.dto';
 import { GoogleUserDto } from '../auth/dtos/google-user.dto';
 
 @Injectable()
