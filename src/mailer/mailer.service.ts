@@ -1,17 +1,17 @@
 import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { MailerService as NestMailerService } from "@nestjs-modules/mailer"
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class MailerService {
-  constructor(private readonly mailerService: NestMailerService,
+  constructor(private readonly mailer: NestMailerService,
               @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
               private readonly configService: ConfigService){}
 
   async sendConfirmationMail(email: string, name: string) {
     const url = this.generateConfirmationLink(email);
-    await this.mailerService.sendMail({
+    await this.mailer.sendMail({
       to: email,
       subject: 'Greeting',
       template: 'confirmation',
@@ -34,7 +34,7 @@ export class MailerService {
 
   async sendForgetPasswordMail(email: string, name: string) {
     const url = this.generateResetPasswordLink(email);
-    await this.mailerService.sendMail({
+    await this.mailer.sendMail({
       to: email,
       subject: 'Reset Password',
       template: 'reset-password',

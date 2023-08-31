@@ -4,6 +4,23 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "assets": ["**/*.hbs"]
+    "assets": [
+      {
+        "include": "../public",
+        "outDir": "dist",
+        "watchAssets": true
+      },
+      {
+        "include": "../templates/views",
+        "outDir": "dist/templates",
+        "watchAssets": true
+      },
+      {
+        "include": "../src/mailer/templates",
+        "outDir": "dist/src",
+        "watchAssets": true
+      }
+    ],
+    "watchAssets": true
   }
 }

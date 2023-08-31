@@ -1,8 +1,8 @@
 import { Controller, Get, UseGuards, Request, Response, Post, Render, Body} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { EmailConfirmGuard } from 'src/auth/guards/email-confirm.guard';
-import { AdminGuard } from 'src/auth/guards/admin.guard';
-import { AuthenticatedGuard } from 'src/auth/guards/auth-guard';
+import { EmailConfirmGuard } from '../auth/guards/email-confirm.guard';
+import { AdminGuard } from '../auth/guards/admin.guard';
+import { AuthenticatedGuard } from '../auth/guards/auth-guard';
 import { UpdateUserDto } from './dtos/update-user.dto';
 
 @UseGuards(EmailConfirmGuard)

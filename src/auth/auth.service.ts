@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, forwardRef, Inject } from '@nestjs/common';
+import { Injectable, BadRequestException, forwardRef, Inject, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
@@ -14,7 +14,6 @@ export class AuthService {
               private jwtService: JwtService,
               @Inject(forwardRef(() => MailerService)) private mailerService: MailerService,
               private readonly configService: ConfigService){}
-
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findByEmail(email);
@@ -85,12 +84,14 @@ export class AuthService {
       throw new BadRequestException('No Email Provided')
     }
     const user = await this.usersService.findByEmail(email)
+    if(!user) {
+      throw new NotFoundException('email not registered')
+    }
     await this.mailerService.sendForgetPasswordMail(email, user.name)
   }
 
   async googleLogin(userDto: GoogleUserDto) {
     let user = await this.usersService.findByEmail(userDto.email)
-
     if (!user) {
       user = await this.usersService.createUser(userDto)
     } else if (user.provider != 'google') {

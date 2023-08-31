@@ -1,10 +1,10 @@
 import { Controller, Get, Query, NotFoundException, Response, UseGuards, Request } from '@nestjs/common';
 import { MailerService } from './mailer.service';
 import { UsersService } from '../users/users.service';
-import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { UpdateUserDto } from '../users/dtos/update-user.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from 'src/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 @Controller('mailer')
 export class MailerController {
   constructor(private readonly mailerService: MailerService,

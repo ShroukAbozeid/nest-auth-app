@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { MailerModule } from './mailer/mailer.module';
+import * as cookieParser from 'cookie-parser'
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,4 +38,12 @@ import { MailerModule } from './mailer/mailer.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private configService: ConfigService) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(cookieParser(
+      this.configService.get<string>('COOKIE_KEY'),
+    )).forRoutes('*')
+    
+  }
+}
